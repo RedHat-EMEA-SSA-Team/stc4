@@ -12,7 +12,7 @@ func srv(domain string){
     cname, srvs, err := net.LookupSRV("etcd-server-ssl", "tcp", domain)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Could not get SRV: %v\n", err)
-        os.Exit(1)
+        
     }
     fmt.Printf("\nChecking SRV Records: %s\n\n", cname)
 
@@ -21,14 +21,14 @@ func srv(domain string){
         ips, err := net.LookupIP(srv.Target)
             if err != nil {
                 fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
-                os.Exit(1)
+                
             }
 
             for _, ip := range ips {
                 addr, err := net.LookupAddr(ip.String())
                 if err != nil {
                         fmt.Fprintf(os.Stderr, "Could not get the fqdn: %v\n", err)
-                        os.Exit(1)
+                        
                 }
 
                 for i, _ := range addr {
@@ -57,14 +57,14 @@ func check_nodes(server string,domain string) {
     ips, err := net.LookupIP(server+"."+domain)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
-        os.Exit(1)
+        
     }
 
     for _, ip := range ips {
         addr, err := net.LookupAddr(ip.String())
         if err != nil {
             fmt.Fprintf(os.Stderr, "Could not get the fqdn: %v\n", err)
-            os.Exit(1)
+            
         }
         if (strings.Contains(addr[0],server+"."+domain)) {
             fmt.Printf("%s OK\n", server)
@@ -79,14 +79,14 @@ func check_api(domain string) {
     api, err := net.LookupIP("api."+domain)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
-        os.Exit(1)
+        
     }else {
         fmt.Printf("api.%s - %s: OK\n", domain,api[0])
     }
     api_int, err := net.LookupIP("api-int."+domain)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
-        os.Exit(1)
+        
     }else {
         fmt.Printf("api-int.%s - %s: OK\n", domain,api_int[0])
     }
@@ -97,12 +97,12 @@ func check_apps(domain string) {
     apps_01, err := net.LookupIP("qwertasdf.apps."+domain)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
-        os.Exit(1)
+        
     }
     apps_02, err := net.LookupIP("poiuylkjh.apps."+domain)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
-        os.Exit(1)
+        
     } 
     if (strings.Contains(apps_01[0].String(),apps_02[0].String())) {
         fmt.Printf("*.apps.%s: OK\n", domain)
@@ -116,12 +116,12 @@ func main() {
     fmt.Printf("\n######################################################\n\n")
 
 
-    domainPtr := flag.String("domain","","-domain=<domain >")
-    nodePtr := flag.String("nodes","","-nodes=master001,master002,master003,worker001,...")
-    etcPtr := flag.Bool("etcd",false,"-etcd=true")
-    apiPtr := flag.Bool("api",false,"-api=true")
-    appsPtr := flag.Bool("apps",false,"-apps=true")
-    help := flag.Bool("help",false,"Show this!")
+    domainPtr := flag.String("domain","","--domain=<domain >")
+    nodePtr := flag.String("nodes","","--nodes=master001,master002,master003,worker001,...")
+    etcPtr := flag.Bool("etcd",false,"--etcd=true")
+    apiPtr := flag.Bool("api",false,"--api=true")
+    appsPtr := flag.Bool("apps",false,"--apps=true")
+    help := flag.Bool("help",false,"--help Show this!")
   
     flag.Parse()
 
