@@ -30,16 +30,28 @@ func srv(domain string){
                         fmt.Fprintf(os.Stderr, "Could not get the fqdn: %v\n", err)
                         os.Exit(1)
                 }
-                if (strings.Contains(addr[0],srv.Target)) {
-                        fmt.Printf("%s FAIL\n", srv.Target)
-                } else {
-                        fmt.Printf("%s OK\n", srv.Target)
+
+                for i, _ := range addr {
+                        if ( len(addr) > 1 ) {
+                                if (! strings.Contains(addr[i],srv.Target)) {
+                                        continue
+                                } else {
+                                        fmt.Printf("%s FAIL\n", srv.Target)
+                                }
+                        } else {
+                                if (strings.Contains(addr[0],srv.Target)) {
+                                        fmt.Printf("%s FAIL\n", srv.Target)
+                                        break
+                                } else {
+                                        fmt.Printf("%s OK\n", srv.Target)
+                                }}
                 }
             }
 
         }
     }
 }
+
 func check_nodes(server string,domain string) {
     fmt.Printf("Checking A and PTR for node:...")
     ips, err := net.LookupIP(server+"."+domain)
