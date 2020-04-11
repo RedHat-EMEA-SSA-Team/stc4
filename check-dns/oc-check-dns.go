@@ -5,7 +5,7 @@ import (
     "fmt"
     "os"
     "strings"
-    "flag"
+    flag "github.com/spf13/pflag"
 )
 
 func srv(domain string){
